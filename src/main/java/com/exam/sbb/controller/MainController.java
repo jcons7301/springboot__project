@@ -1,5 +1,7 @@
 package com.exam.sbb.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +32,22 @@ public class MainController {
       case "brian" -> "ENFP";
       default -> "모름";
     };
+  }
+
+  @GetMapping("/saveSession/{name}/{value}")
+  @ResponseBody
+  public  String saveSession(@PathVariable String name, @PathVariable String value, HttpServletRequest req){
+    HttpSession session = req.getSession();
+    session.setAttribute(name, value);
+    return "세선변수 %s의 값이 %s로 설정되었습니다".formatted(name, value);
+  }
+
+  @GetMapping("/getSession/{name}")
+  @ResponseBody
+  public  String getSession(@PathVariable String name, HttpSession session){
+    String value = (String) session.getAttribute(name);
+
+    return "세선변수 %s의 값은 %s입니다".formatted(name, value);
   }
 
 }
